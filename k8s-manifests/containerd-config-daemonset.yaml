@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: containerd-config
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: containerd-config
+  template:
+    metadata:
+      labels:
+        name: containerd-config
+    spec:
+      hostPID: true
+      hostNetwork: true
+      initContainers:
+      - name: configure-containerd
+        image: busybox
+        command:
+        - sh
+        - -c
+        - |
+          mkdir -p /host/etc/containerd/certs.d/YOUR_NEXUS_IP:8082
+          cat > /host/etc/containerd/certs.d/YOUR_NEXUS_IP:8082/hosts.toml <<EOF
+          server = "http://YOUR_NEXUS_IP:8082"
+          
+          [host."http://YOUR_NEXUS_IP:8082"]
+            capabilities = ["pull", "resolve"]
+            skip_verify = true
+          EOF
+          
+          nsenter -t 1 -m -u -i -n systemctl restart containerd || true
+          echo "Containerd configured for insecure registry"
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: etc-containerd
+          mountPath: /host/etc/containerd
+      containers:
+      - name: pause
+        image: gcr.io/google_containers/pause:3.2
+      volumes:
+      - name: etc-containerd
+        hostPath:
+          path: /etc/containerd
+          type: Directory

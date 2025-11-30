@@ -1,0 +1,45 @@
+<div *ngIf="orders?.length === 0">
+  <p>No assigned orders.</p>
+</div>
+
+<div *ngFor="let order of orders" class="order-card">
+  <p><strong>Order ID:</strong> {{ order.id }}</p>
+  <p><strong>Status:</strong> {{ order.status }}</p>
+  <p><strong>Order Details: </strong></p>
+  <div *ngIf="order. package_details">
+    <p><strong>Package Details:</strong> {{ order. package_details }}</p>
+  </div>
+  <div *ngIf="order.pickup_location">
+    <p><strong>Pickup Location:</strong> {{ order.pickup_location}}</p>
+  </div>
+  <div *ngIf="order.dropoff_location">
+    <p><strong>Dropoff Location:</strong> {{ order.dropoff_location }}</p>
+  </div>
+  
+
+  <div *ngIf="order.status !== 'picked up' && order.status !== 'in transit' && order.status !== 'delivered'" 
+     class="button-group">
+  <button class="accept-button" (click)="acceptOrder(order.id)" 
+          [disabled]="order.status === 'picked up' || order.status === 'in transit' || order.status === 'delivered'">
+    Accept
+  </button>
+
+  <button class="decline-button" (click)="declineOrder(order.id)" 
+          [disabled]="order.status === 'picked up' || order.status === 'in transit' || order.status === 'delivered'">
+    Decline
+  </button>
+</div>
+
+<div *ngIf="order.status === 'picked up'" class="button-group">
+  <button class="accept-button" (click)="updateOrderStatus(order.id, 'in transit')">
+    Mark as In Transit
+  </button>
+</div>
+
+<div *ngIf="order.status === 'in transit'" class="button-group">
+  <button class="accept-button" (click)="updateOrderStatus(order.id, 'delivered')">
+    Mark as Delivered
+  </button>
+</div>
+
+</div>

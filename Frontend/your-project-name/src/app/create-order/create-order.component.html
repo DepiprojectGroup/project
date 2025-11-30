@@ -1,0 +1,33 @@
+<h2>Create Order</h2>
+<form [formGroup]="createOrderForm" (ngSubmit)="onCreateOrder()" class="create-order-form">
+  <div class="form-group">
+    <label>Pickup Location:</label>
+    <input type="text" formControlName="pickup_location" class="form-input" required />
+    <div *ngIf="createOrderForm.get('pickup_location')?.invalid && createOrderForm.get('pickup_location')?.touched" class="error-message">
+      Pickup location is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Dropoff Location:</label>
+    <input type="text" formControlName="dropoff_location" class="form-input" required />
+    <div *ngIf="createOrderForm.get('dropoff_location')?.invalid && createOrderForm.get('dropoff_location')?.touched" class="error-message">
+      Dropoff location is required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Package Details:</label>
+    <textarea formControlName="package_details" class="form-input" rows="4" required></textarea>
+    <div *ngIf="createOrderForm.get('package_details')?.invalid && createOrderForm.get('package_details')?.touched" class="error-message">
+      Package details are required.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Delivery Time (optional):</label>
+    <input type="datetime-local" formControlName="delivery_time" class="form-input" />
+  </div>
+
+  <button type="submit" class="submit-button" [disabled]="createOrderForm.invalid">Create Order</button>
+</form>

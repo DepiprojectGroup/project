@@ -1,0 +1,44 @@
+<div class="manage-orders">
+  <h1>Manage Orders</h1>
+  
+  <form [formGroup]="orderForm">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Pickup Location</th>
+          <th>Dropoff Location</th>
+          <th>Package Details</th>
+          <th>Status</th>
+          <th>Courier ID</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.pickup_location }}</td>
+          <td>{{ order.dropoff_location }}</td>
+          <td>{{ order.package_details }}</td>
+          <td class="status-cell">
+
+            <select [formControlName]="'status-' + order.id">
+              <option value="pending">Pending</option>
+              <option value="in transit">In transit</option>
+              <option value="delivered">Delivered</option>
+            </select>
+            <button class="confirm-btn" (click)="updateOrderStatus(order)">Confirm</button>
+          </td>
+          <td class="courier-cell">
+ 
+            <input type="number" placeholder="Enter Courier ID" [formControlName]="'assignedCourier-' + order.id" [min]="1">
+            <button class="confirm-btn" (click)="assignCourier(order)">Assign</button>
+          </td>
+          <td class="actions-cell">
+            <button class="delete-btn" (click)="deleteOrder(order.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</div>

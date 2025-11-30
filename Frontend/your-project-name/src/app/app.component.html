@@ -1,0 +1,8 @@
+<div>
+  <!-- Show UserInfoComponent if not registered -->
+  <app-user-info *ngIf="!showLogin" (registrationSubmitted)="onRegistrationSubmit()"></app-user-info>
+  
+  <!-- Show LoginComponent if registered -->
+  <app-login *ngIf="showLogin"></app-login>
+  
+</div>

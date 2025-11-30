@@ -1,0 +1,43 @@
+<h2 class="orders-title">My Orders</h2>
+
+<div *ngIf="loading" class="loading-spinner"></div>
+
+<div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+
+<div *ngIf="!loading && orders.length === 0" class="no-orders-message">No orders found.</div>
+
+<ul *ngIf="!loading && orders.length > 0" class="orders-list">
+  <li *ngFor="let order of orders" class="order-item">
+    <div class="order-details">
+      <strong>Order ID:</strong> {{ order.id }}
+    </div>
+
+    <div class="order-status">
+      <strong>Status:</strong>
+      <span [ngClass]="{'delivered': order.status === 'delivered', 'pending': order.status === 'pending', 'in transit': order.status === 'in-transit'}">
+        {{ order.status }}
+      </span>
+    </div>
+
+    <button
+  *ngIf="order.status === 'pending'"
+  (click)="cancelOrder(order.id)"
+  class="cancel-order-button"
+>
+  Cancel Order
+</button>
+
+
+    <button (click)="toggleOrderDetails(order.id)">
+      Show Order Details
+    </button>
+
+    <div *ngIf="expandedOrderId === order.id" class="order-expanded-details">
+      <p><strong>Pickup Location:</strong> {{ order.pickup_location || 'Not specified' }}</p>
+      <p><strong>Dropoff Location:</strong> {{ order.dropoff_location || 'Not specified' }}</p>
+      <p><strong>Package Details:</strong> {{ order.package_details || 'Not provided' }}</p>
+    </div>
+
+    <hr class="order-separator" />
+  </li>
+</ul>

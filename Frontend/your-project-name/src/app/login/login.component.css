@@ -1,0 +1,65 @@
+
+.login-form {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px; 
+    background-color: #ffffff; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease; 
+  }
+  
+  .form-group {
+    margin-bottom: 20px; 
+  }
+  
+  .label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333; 
+  }
+  
+  /* Input Styles */
+  .form-input {
+    width: 100%;
+    padding: 12px; 
+    border: 1px solid #ccc;
+    border-radius: 5px; 
+    box-sizing: border-box;
+    font-size: 16px; 
+    transition: border-color 0.3s ease;
+  }
+  
+  .form-input:focus {
+    border-color: #5bc0de; 
+    outline: none; 
+  }
+  .error-message {
+    color: #d9534f; 
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .submit-button {
+    background-color: #5bc0de;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px; 
+    transition: background-color 0.3s ease, transform 0.3s ease; 
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #31b0d5; 
+    transform: translateY(-2px); 
+  }
+  
+  .submit-button:disabled {
+    background-color: #bcd3d8;
+    cursor: not-allowed;
+  }
+  

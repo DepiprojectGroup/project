@@ -1,0 +1,39 @@
+.create-order-form {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px; 
+  background-color: #ffffff; 
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+}
+
+.form-group {
+  margin-bottom: 20px; 
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px; 
+  border: 1px solid #ccc;
+  border-radius: 5px; 
+  box-sizing: border-box;
+}
+
+.error-message {
+  color: #d9534f; 
+  font-size: 14px;
+}
+
+.submit-button {
+  background-color: #5bc0de;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.submit-button:hover {
+  background-color: #31b0d5; 
+  transition: background-color 0.3s ease;
+}

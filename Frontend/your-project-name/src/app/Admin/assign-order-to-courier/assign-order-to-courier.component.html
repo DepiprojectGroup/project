@@ -1,0 +1,45 @@
+<div class="assigned-orders">
+  <h1>Assigned Orders to Couriers</h1>
+
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <table *ngIf="orders.length > 0; else noOrders">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Currently Assigned Courier</th>
+        <th>Reassign Order to Courier (ID)</th>
+        <th>Confirm Reassign</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.status }}</td>
+        <td>{{ order.courier_id }}</td>
+        <td>
+          <input 
+            type="number" 
+            [(ngModel)]="order.courier_id"
+            class="courier-id-input"
+            placeholder="Enter Courier ID"
+            min="1">
+        </td>
+        <td>
+          <button 
+            class="confirm-btn" 
+            (click)="reassignOrder(order.id, order.courier_id || 0)">
+            Confirm Reassign
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noOrders>
+    <div class="no-orders">No Pending orders assigned to couriers.</div>
+  </ng-template>
+</div>

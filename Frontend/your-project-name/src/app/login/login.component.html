@@ -1,0 +1,37 @@
+<h2 class="form-title">Login Form</h2>
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+
+  <div class="form-group">
+    <label for="email" class="form-label">Email:</label>
+    <input 
+      id="email"
+      type="email" 
+      formControlName="email" 
+      class="form-input" 
+      (input)="loginForm.get('email')?.updateValueAndValidity()" 
+      required 
+    />
+    <div *ngIf="loginForm.get('email')?.touched || loginForm.get('email')?.dirty" class="error-message">
+      <ng-container *ngIf="loginForm.get('email')?.errors?.['required']">Email is required.</ng-container>
+      <ng-container *ngIf="loginForm.get('email')?.errors?.['email']">Invalid email format.</ng-container>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password" class="form-label">Password:</label>
+    <input 
+      id="password"
+      type="password" 
+      formControlName="password" 
+      class="form-input" 
+      (input)="loginForm.get('password')?.updateValueAndValidity()" 
+      required 
+    />
+    
+    <div *ngIf="loginForm.get('password')?.touched || loginForm.get('password')?.dirty" class="error-message">
+      <ng-container *ngIf="loginForm.get('password')?.errors?.['required']">Password is required.</ng-container>
+      <ng-container *ngIf="loginForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters long.</ng-container>
+    </div>
+  </div>
+  <button type="submit" class="submit-button" [disabled]="loginForm.invalid">Login</button>
+</form>

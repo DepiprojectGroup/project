@@ -1,0 +1,57 @@
+<h2>Registration Form</h2>
+<form [formGroup]="userInfoForm" (ngSubmit)="onSubmit()">
+  <!-- Name Field -->
+  <div>
+    <label>Name:</label>
+    <input type="text" formControlName="name" />
+    <div *ngIf="userInfoForm.get('name')?.invalid && userInfoForm.get('name')?.touched">
+      <span *ngIf="userInfoForm.get('name')?.errors?.['required']">Name is required.</span>
+    </div>
+  </div>
+
+  <!-- Email Field -->
+  <div>
+    <label>Email:</label>
+    <input type="email" formControlName="email" />
+    <div *ngIf="userInfoForm.get('email')?.invalid && userInfoForm.get('email')?.touched">
+      <span *ngIf="userInfoForm.get('email')?.errors?.['required']">Email is required.</span>
+      <span *ngIf="userInfoForm.get('email')?.errors?.['email']">Enter a valid email address.</span>
+    </div>
+  </div>
+
+  <!-- Phone Field -->
+  <div>
+    <label>Phone:</label>
+    <input type="text" formControlName="phone" />
+    <div *ngIf="userInfoForm.get('phone')?.invalid && userInfoForm.get('phone')?.touched">
+      <span *ngIf="userInfoForm.get('phone')?.errors?.['required']">Phone number is required.</span>
+      <span *ngIf="userInfoForm.get('phone')?.errors?.['pattern']">Enter a valid Phone number.</span>
+    </div>
+  </div>
+
+  <!-- Password Field -->
+  <div>
+    <label>Password:</label>
+    <input type="password" formControlName="password" />
+    <div *ngIf="userInfoForm.get('password')?.touched">
+      <span *ngIf="passwordErrors">{{ passwordErrors }}</span>
+    </div>
+  </div>
+
+  <div>
+    <label>Role:</label>
+    <select formControlName="role">
+      <option value="" disabled selected>Select your role</option>
+      <option value="customer">User</option>
+      <option value="courier">Courier</option>
+      <option value="admin">Admin</option>
+    </select>
+    <div *ngIf="userInfoForm.get('role')?.invalid && userInfoForm.get('role')?.touched">
+      <span *ngIf="userInfoForm.get('role')?.errors?.['required']">Role is required.</span>
+    </div>
+  </div>
+  
+
+  <button type="submit" [disabled]="userInfoForm.invalid">Submit</button>
+
+</form>
