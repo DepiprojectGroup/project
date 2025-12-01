@@ -78,7 +78,7 @@ resource "aws_subnet" "private_2" {
   availability_zone = "${var.aws_region}b"  # Different AZ for RDS
 
   tags = {
-    Name = "${var.project_name}-private-subnet-2"  
+    Name = "${var.project_name}-private-subnet-2"
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
