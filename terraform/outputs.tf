@@ -4,11 +4,11 @@ output "vpc_id" {
 }
 
 output "public_subnet_ids" {
-  value = [aws_subnet.public_1.id, aws_subnet.public_2.id]
+  value = [aws_subnet.public.id, aws_subnet.public_2.id]
 }
 
 output "private_subnet_ids" {
-  value = [aws_subnet.private_1.id, aws_subnet.private_2.id]
+  value = [aws_subnet.private.id, aws_subnet.private_2.id]
 }
 
 output "nexus_public_ip" {
