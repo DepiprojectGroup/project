@@ -16,7 +16,7 @@ data "aws_ami" "amazon_linux_2" {
 
 # EC2 Instance for Nexus
 resource "aws_instance" "nexus" {
-  ami                    = ami-0f50f13aefb6c0a5d # صح: استخدم data source
+  ami                    =  data.aws_ami.amazon_linux_2.id  # صح: استخدم data source
   instance_type          = var.nexus_instance_type
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.nexus.id]
