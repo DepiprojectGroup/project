@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('GitHub') {
+            steps {
+               git branch: 'main', url: 'https://github.com/DepiprojectGroup/project.git'
+            }
+        }
+        
+        stage(' Docker images') {
+            steps {
+                bat '''
+                    docker build -t backend-image ./backend
+                    docker build -t frontend-image ./frontend/your-project-name
+                '''
+            }
+        }
+            stage('Run') {
+            steps {
+                bat '''
+                    docker run -d -p 8089:8090 --name  backend-image  backend-image
+                    docker run -d -p 4000:80 --name frontend-image frontend-image
+                    
+                    echo.
+                    echo ====================
+                    echo    is running !!!
+                    echo ====================
+                '''
+            }
+        }
+    }
+}
+        
