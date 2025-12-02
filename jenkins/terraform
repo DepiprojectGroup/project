@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    
+    stages {
+        stage('Deploy') {
+            steps {
+                git branch: 'main', url: 'https://github.com/DepiprojectGroup/project.git'
+                
+                dir('terraform') {
+                    withCredentials([aws(credentialsId: 'aws-cre', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh '''
+                            echo === Step 1: Terraform Init ===
+                            terraform init
+                            
+                            terraform apply -auto-approve
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
