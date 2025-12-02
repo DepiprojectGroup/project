@@ -1,6 +1,6 @@
 # External RDS Database Connection
 # This creates an external service that points to the RDS instance
-# Replace RDS_ENDPOINT with actual RDS endpoint from Terraform output
+# Replace ordering-system-postgres.cxq8qmg8ofud.eu-central-1.rds.amazonaws.com:5432 with actual RDS endpoint from Terraform output
 
 apiVersion: v1
 kind: Service

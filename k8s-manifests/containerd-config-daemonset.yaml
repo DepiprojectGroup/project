@@ -21,11 +21,11 @@ spec:
         - sh
         - -c
         - |
-          mkdir -p /host/etc/containerd/certs.d/YOUR_NEXUS_IP:8082
-          cat > /host/etc/containerd/certs.d/YOUR_NEXUS_IP:8082/hosts.toml <<EOF
-          server = "http://YOUR_NEXUS_IP:8082"
+          mkdir -p /host/etc/containerd/certs.d/63.180.119.117:8082
+          cat > /host/etc/containerd/certs.d/63.180.119.117:8082/hosts.toml <<EOF
+          server = "http://63.180.119.117:8082"
           
-          [host."http://YOUR_NEXUS_IP:8082"]
+          [host."http://63.180.119.117:8082"]
             capabilities = ["pull", "resolve"]
             skip_verify = true
           EOF

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: YOUR_NEXUS_IP:8082/backend:v1.0.0
+        image: 63.180.119.117:8082/backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000

@@ -45,7 +45,7 @@
           -p {{ nexus_port }}:8081 \
           -p {{ docker_port }}:8082 \
           -v {{ nexus_data_dir }}:/nexus-data \
-          -e INSTALL4J_ADD_VM_PARAMS="-Xms1200m -Xmx1200m -XX:MaxDirectMemorySize=2g" \
+          -e INSTALL4J_ADD_VM_PARAMS="-Xms512m -Xmx768m -XX:MaxDirectMemorySize=1g" \
           sonatype/nexus3:latest
       args:
         executable: /bin/bash

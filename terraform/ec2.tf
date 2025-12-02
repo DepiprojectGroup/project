@@ -20,7 +20,7 @@ resource "aws_instance" "nexus" {
   instance_type          = var.nexus_instance_type
   subnet_id              = aws_subnet.public.id
   vpc_security_group_ids = [aws_security_group.nexus.id]
-  key_name               = "" 
+  key_name               = "youssef" 
 
   root_block_device {
     volume_size = 8   
