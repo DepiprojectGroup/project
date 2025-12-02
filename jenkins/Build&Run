@@ -12,7 +12,7 @@ pipeline {
             steps {
                 bat '''
                     docker build -t backend-image ./backend
-                    docker build -t frontend-image ./frontend/your-project-name
+                    docker build -t frontend-image ./Frontend/your-project-name
                 '''
             }
         }
