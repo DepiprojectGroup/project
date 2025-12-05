@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_REGISTRY = "ec2-13-53-51-9.eu-north-1.compute.amazonaws.com:8081"
+        DOCKER_CREDENTIALS = "nexus"
+    }
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/DepiprojectGroup/project.git'
+            }
+        }
+
+        stage('Build and Push Docker Images') {
+            steps {
+                script {
+                    // Build images locally first
+                    def frontendImage = docker.build("hossam/my-frontend:${env.BUILD_NUMBER}", "./Frontend/your-project-name")
+                    def backendImage  = docker.build("hossam/my-backend:${env.BUILD_NUMBER}", "./backend")
+
+                    // Tag images with registry
+                    def frontendTag = "${DOCKER_REGISTRY}/hossam/my-frontend:${env.BUILD_NUMBER}"
+                    def backendTag  = "${DOCKER_REGISTRY}/hossam/my-backend:${env.BUILD_NUMBER}"
+
+                    frontendImage.tag(frontendTag)
+                    backendImage.tag(backendTag)
+
+                    // Push images to Nexus
+                    docker.withRegistry("http://${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS}") {
+                        docker.image(frontendTag).push()
+                        docker.image(backendTag).push()
+                    }
+                }
+            }
+        }
+    }
+}
