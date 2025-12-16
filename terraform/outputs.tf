@@ -13,24 +13,20 @@ output "private_subnet_id" {
   value       = aws_subnet.private.id
 }
 
-output "nexus_public_ip" {
-  description = "Nexus server public IP"
-  value       = aws_eip.nexus.public_ip
+# ECR Repository URLs
+output "ecr_backend_url" {
+  description = "ECR Backend repository URL"
+  value       = aws_ecr_repository.backend.repository_url
 }
 
-output "nexus_instance_id" {
-  description = "Nexus EC2 instance ID"
-  value       = aws_instance.nexus.id
+output "ecr_frontend_url" {
+  description = "ECR Frontend repository URL"
+  value       = aws_ecr_repository.frontend.repository_url
 }
 
-output "nexus_url" {
-  description = "Nexus URL"
-  value       = "http://${aws_eip.nexus.public_ip}:8081"
-}
-
-output "docker_registry_url" {
-  description = "Docker registry URL"
-  value       = "${aws_eip.nexus.public_ip}:8082"
+output "ecr_registry" {
+  description = "ECR Registry URL"
+  value       = split("/", aws_ecr_repository.backend.repository_url)[0]
 }
 
 output "eks_cluster_name" {
@@ -85,3 +81,15 @@ output "database_url" {
   value       = "postgresql://${var.db_username}:${var.db_password}@${aws_db_instance.main.endpoint}/${var.db_name}"
   sensitive   = true
 }
+
+# AWS Load Balancer Controller Outputs
+output "alb_controller_role_arn" {
+  description = "IAM Role ARN for AWS Load Balancer Controller"
+  value       = aws_iam_role.aws_load_balancer_controller.arn
+}
+
+output "eks_oidc_provider_arn" {
+  description = "EKS OIDC Provider ARN"
+  value       = aws_iam_openid_connect_provider.eks.arn
+}
+

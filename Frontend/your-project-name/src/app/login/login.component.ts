@@ -31,7 +31,7 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
   
-      fetch(`${environment.apiUrl}/login`, {
+      fetch(`${environment.apiUrl}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

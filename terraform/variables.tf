@@ -5,9 +5,15 @@ variable "aws_region" {
 }
 
 variable "project_name" {
-  description = "ordering system"
+  description = "Project name prefix for all resources"
   type        = string
   default     = "ordering-system"
+}
+
+variable "ssh_key_name" {
+  description = "SSH key pair name for EC2 instances"
+  type        = string
+  default     = "youssef"
 }
 
 variable "vpc_cidr" {
@@ -32,12 +38,6 @@ variable "availability_zone" {
   description = "Availability zone for subnets"
   type        = string
   default     = "eu-central-1a"
-}
-
-variable "nexus_instance_type" {
-  description = "EC2 instance type for Nexus"
-  type        = string
-  default     = "t3.small"
 }
 
 variable "eks_cluster_name" {

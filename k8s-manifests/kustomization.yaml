@@ -1,0 +1,32 @@
+# Kustomize configuration for ordering-system
+# This enables cleaner deployment without manual sed replacements
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ordering-system
+
+resources:
+  - namespace.yaml
+  - database-statefulset.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - ingress.yaml
+
+# Common labels for all resources
+commonLabels:
+  app.kubernetes.io/managed-by: kustomize
+  app.kubernetes.io/part-of: ordering-system
+
+# Images can be overridden via command line:
+# kustomize edit set image backend=ECR_URL:tag frontend=ECR_URL:tag
+# Or use: kubectl apply -k . --set-image
+images:
+  - name: ECR_BACKEND_URL
+    newName: BACKEND_IMAGE_PLACEHOLDER
+    newTag: latest
+  - name: ECR_FRONTEND_URL
+    newName: FRONTEND_IMAGE_PLACEHOLDER
+    newTag: latest

@@ -1,12 +1,13 @@
 # External RDS Database Connection
-# This creates an external service that points to the RDS instance
-# Replace ordering-system-postgres.cxq8qmg8ofud.eu-central-1.rds.amazonaws.com:5432 with actual RDS endpoint from Terraform output
-
+# Creates a service pointing to the external RDS instance
+# Replace ordering-system-postgres.cxq8qmg8ofud.eu-central-1.rds.amazonaws.com with actual endpoint from: terraform output rds_address
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres
   namespace: ordering-system
+  labels:
+    app: postgres
 spec:
   type: ExternalName
   externalName: ordering-system-postgres.cxq8qmg8ofud.eu-central-1.rds.amazonaws.com
@@ -14,30 +15,3 @@ spec:
   - port: 5432
     targetPort: 5432
     protocol: TCP
-
----
-# Alternative: Using Endpoints for RDS
-# Uncomment if ExternalName doesn't work with your setup
-
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: postgres
-#   namespace: ordering-system
-# spec:
-#   type: ClusterIP
-#   ports:
-#   - port: 5432
-#     targetPort: 5432
-#     protocol: TCP
-# ---
-# apiVersion: v1
-# kind: Endpoints
-# metadata:
-#   name: postgres
-#   namespace: ordering-system
-# subsets:
-# - addresses:
-#   - ip: RDS_IP  # Will be replaced with actual RDS IP
-#   ports:
-#   - port: 5432

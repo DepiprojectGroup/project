@@ -37,7 +37,7 @@ export class AssignedOrdersComponent implements OnInit {
 
   getAssignedOrders(): void {
     if (!this.courierId) return;
-    this.http.get<Order[]>(`${environment.apiUrl}/CourierOrder?courier_id=${this.courierId}`)
+    this.http.get<Order[]>(`${environment.apiUrl}/api/CourierOrder?courier_id=${this.courierId}`)
       .pipe(
         catchError(error => {
           console.error('Error fetching assigned orders:', error);
@@ -52,7 +52,7 @@ export class AssignedOrdersComponent implements OnInit {
 
 
   acceptOrder(orderId: number): void {
-    this.http.put(`${environment.apiUrl}/acceptOrder`, { order_id: orderId })
+    this.http.put(`${environment.apiUrl}/api/acceptOrder`, { order_id: orderId })
       .subscribe(() => {
         this.orders = this.orders.map(order =>
           order.id === orderId ? { ...order, status: 'picked up' } : order
@@ -63,7 +63,7 @@ export class AssignedOrdersComponent implements OnInit {
   }
 
   declineOrder(orderId: number): void {
-    this.http.put(`${environment.apiUrl}/DeclineOrder`, { order_id: orderId })
+    this.http.put(`${environment.apiUrl}/api/DeclineOrder`, { order_id: orderId })
       .subscribe(() => {
         this.orders = this.orders.filter(order => order.id !== orderId);
       }, error => {
@@ -72,7 +72,7 @@ export class AssignedOrdersComponent implements OnInit {
   }
 
   updateOrderStatus(orderId: number, status: string): void {
-    this.http.put(`${environment.apiUrl}/UpdateOrderStatus`, { orderId, status })
+    this.http.put(`${environment.apiUrl}/api/UpdateOrderStatus`, { orderId, status })
       .subscribe(() => {
         this.orders = this.orders.map(order =>
           order.id === orderId ? { ...order, status } : order

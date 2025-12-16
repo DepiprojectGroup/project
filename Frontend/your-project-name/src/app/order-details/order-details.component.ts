@@ -35,7 +35,7 @@ export class OrderDetailsComponent implements OnInit {
   }
   
   fetchOrderDetails(orderId: string) {
-    fetch(`${environment.apiUrl}/orders/${orderId}`)
+    fetch(`${environment.apiUrl}/api/orders/${orderId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to fetch order details');

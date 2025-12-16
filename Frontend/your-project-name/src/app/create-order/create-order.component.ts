@@ -41,7 +41,7 @@ export class CreateOrderComponent {
         user_id: userId
       };
 
-      fetch(`${environment.apiUrl}/orders/create`, {
+      fetch(`${environment.apiUrl}/api/orders/create`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

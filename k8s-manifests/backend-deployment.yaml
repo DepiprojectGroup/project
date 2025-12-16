@@ -1,10 +1,13 @@
+# Backend Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
   namespace: ordering-system
+  labels:
+    app: backend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -15,7 +18,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: 63.180.119.117:8082/backend:latest
+        image: 654654186246.dkr.ecr.eu-central-1.amazonaws.com/ordering-system/backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8000
@@ -27,48 +30,26 @@ spec:
             secretKeyRef:
               name: database-secret
               key: url
-        - name: DB_HOST
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: host
-        - name: DB_PORT
-          value: "5432"
-        - name: DB_NAME
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: database
-        - name: DB_USER
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: username
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: database-secret
-              key: password
         - name: PORT
           value: "8000"
         resources:
           requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
             memory: "256Mi"
             cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         livenessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 8000
           initialDelaySeconds: 30
           periodSeconds: 10
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
-            path: /health
+            path: /api/health
             port: 8000
           initialDelaySeconds: 10
           periodSeconds: 5
-      imagePullSecrets:
-      - name: nexus-registry-secret
+          timeoutSeconds: 3

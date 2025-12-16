@@ -1,28 +1,33 @@
-FROM python:3.9
+# Multi-stage build using Alpine
+FROM python:3.9-slim AS builder
 
-# Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the requirements file into the container
-COPY ./requirements.txt ./
+# Install build dependencies and clean up in same layer
+COPY requirements.txt .
+RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Install the dependencies
-RUN pip install -r requirements.txt
+# Final stage
+FROM python:3.9-slim
 
-# Copy the rest of the application code into the container
-COPY . .
+WORKDIR /usr/src/app
 
-# Expose the port the app runs on
+# Copy only the installed packages from builder
+COPY --from=builder /root/.local /root/.local
+
+# Copy application code
+COPY main.py config.py model.py ./
+
+# Make sure scripts in .local are usable
+ENV PATH=/root/.local/bin:$PATH
+
 EXPOSE 8000
 
-# Set the environment variables
 ENV FLASK_APP=main.py
 ENV FLASK_ENV=production
 ENV PORT=8000
 
-# Add healthcheck
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"
 
-# Command to run the Flask application
 CMD ["python", "main.py"]

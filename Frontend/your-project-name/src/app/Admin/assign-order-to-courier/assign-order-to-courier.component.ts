@@ -39,7 +39,7 @@ export class AssignOrderToCourierComponent implements OnInit {
 
   private async fetchAssignedOrders() {
     try {
-      const response = await fetch(`${environment.apiUrl}/admin/assigned-orders`);
+      const response = await fetch(`${environment.apiUrl}/api/admin/assigned-orders`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -56,7 +56,7 @@ export class AssignOrderToCourierComponent implements OnInit {
 
   private async fetchCouriers() {
     try {
-      const response = await fetch(`${environment.apiUrl}/couriers`);
+      const response = await fetch(`${environment.apiUrl}/api/couriers`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -88,7 +88,7 @@ export class AssignOrderToCourierComponent implements OnInit {
     console.log('Reassigning order ID:', orderId, 'to courier ID:', newCourierId);  
   
     try {
-      const response = await fetch(`${environment.apiUrl}/AssignOrder`, {
+      const response = await fetch(`${environment.apiUrl}/api/AssignOrder`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

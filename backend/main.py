@@ -1,12 +1,12 @@
 import os
 from flask import request, jsonify, current_app
-from config import app, db
+from config import app, db, api
 from model import UserModel , AdminModel, CourierModel, OrderModel
 
 #======================================================================================================================#
 #=========Signup/Login==================#
 
-@app.route('/signup', methods=['POST'])
+@api.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
     required_fields = ['name', 'email', 'phone', 'password', 'role']
@@ -43,7 +43,7 @@ def signup():
     return jsonify(new_user.json()), 201
 
 
-@app.route('/login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     if not data or not all(key in data for key in ['email', 'password']):
@@ -66,7 +66,7 @@ def login():
 #======================================================================================================================#
 #=========Orders==================#
 
-@app.route('/orders/create', methods=['POST'])
+@api.route('/orders/create', methods=['POST'])
 def create_order():
     data = request.get_json()
     if not data or not all(key in data for key in ['user_id', 'pickup_location', 'dropoff_location','package_details']):
@@ -83,7 +83,7 @@ def create_order():
         return jsonify({'message': str(e)}), 400
     return jsonify(new_order.json()), 200
 
-@app.route('/users/order', methods=['GET'])
+@api.route('/users/order', methods=['GET'])
 def get_user_orders():
     user_id = request.args.get('user_id')  
     if not user_id:
@@ -97,7 +97,7 @@ def get_user_orders():
     return jsonify([order.json() for order in orders]), 200
 
 
-@app.route('/users/order', methods=['GET'])
+@api.route('/users/order', methods=['GET'])
 def get_order():
     data = request.get_json() 
     user_id = data.get('user_id')
@@ -117,13 +117,13 @@ def get_order():
 # Admin features
 
 #Reterive all orders
-@app.route('/admin/AllOrders', methods=['GET'])
+@api.route('/admin/AllOrders', methods=['GET'])
 def get_all_orders():
     orders = OrderModel.query.all()
     return jsonify([order.json() for order in orders]), 200
 
 # Delete Order
-@app.route('/admin/delete/order', methods=['DELETE'])
+@api.route('/admin/delete/order', methods=['DELETE'])
 def delete_order():
     order_id = request.args.get('order_id',type=int)
     if not order_id:
@@ -135,7 +135,7 @@ def delete_order():
     db.session.commit()
     return jsonify({'message': 'Order is deleted'}), 200
 
-@app.route('/couriers', methods=['GET'])
+@api.route('/couriers', methods=['GET'])
 def get_couriers():
     courier_id = request.args.get('courier_id', type=int)  # Optional filter by courier ID
     
@@ -149,7 +149,7 @@ def get_couriers():
     return jsonify([courier.json() for courier in couriers]), 200
 
 # Cancel Order if it's still pending
-@app.route('/cancelOrder', methods=['PUT'])
+@api.route('/cancelOrder', methods=['PUT'])
 def cancel_order():
     order_id = request.args.get('order_id', type=int)
     if not order_id:
@@ -174,7 +174,7 @@ def cancel_order():
 
 #get Courier orders
 # Get Courier Orders
-@app.route('/CourierOrder', methods=['GET'])  # Corrected endpoint
+@api.route('/CourierOrder', methods=['GET'])  # Corrected endpoint
 def get_courier_orders():
     courier_id = request.args.get('courier_id', type=int)
     
@@ -194,7 +194,7 @@ def get_courier_orders():
     return jsonify([order.json() for order in assigned_orders]), 200
 
 # Accept Order
-@app.route('/acceptOrder', methods=['PUT'])
+@api.route('/acceptOrder', methods=['PUT'])
 def accept_order():
     data = request.get_json() 
     order_id = data.get('order_id')
@@ -204,7 +204,7 @@ def accept_order():
     return jsonify({'message': 'Order is accepted successfully'}),200
 
 # Decline Order
-@app.route('/DeclineOrder', methods=['PUT'])
+@api.route('/DeclineOrder', methods=['PUT'])
 def decline_order():
     data = request.get_json() 
     order_id = data.get('order_id')
@@ -213,7 +213,7 @@ def decline_order():
     db.session.commit()
     return jsonify({'message': 'Order is declined successfully'}),200
 # Assign Orders to Courier (Initial Assignment)
-@app.route('/AssignOrder', methods=['PUT'])
+@api.route('/AssignOrder', methods=['PUT'])
 def assign_order_to_courier():
     data = request.get_json()
 
@@ -242,7 +242,7 @@ def assign_order_to_courier():
 
 
 # Retrieve all assigned orders
-@app.route('/admin/assigned-orders', methods=['GET'])
+@api.route('/admin/assigned-orders', methods=['GET'])
 def get_assigned_orders():
     orders = OrderModel.query.filter(OrderModel.courier_id.isnot(None)).all() 
     if not orders:
@@ -253,7 +253,7 @@ def get_assigned_orders():
 #============================================================================
 #Courier and Admin Common features
 # Update Order Status
-@app.route('/UpdateOrderStatus', methods=['PUT'])
+@api.route('/UpdateOrderStatus', methods=['PUT'])
 def update_order_status():
     try:
         data = request.get_json()
@@ -276,9 +276,12 @@ def update_order_status():
         return jsonify({'message': f'Error: {str(e)}'}), 500
 
 # Health check endpoint
-@app.route('/health', methods=['GET'])
+@api.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status': 'healthy', 'message': 'Backend is running'}), 200
+
+# Register blueprint
+app.register_blueprint(api)
 
 if __name__ == '__main__':
     with app.app_context():

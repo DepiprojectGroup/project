@@ -32,7 +32,7 @@ export class MyOrdersComponent implements OnInit {
       return;
     }
   
-    fetch(`${environment.apiUrl}/users/order?user_id=${userId}`, {
+    fetch(`${environment.apiUrl}/api/users/order?user_id=${userId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -67,7 +67,7 @@ export class MyOrdersComponent implements OnInit {
     }
   }
   cancelOrder(orderId: string) {
-    fetch(`${environment.apiUrl}/cancelOrder?order_id=${orderId}`, {
+    fetch(`${environment.apiUrl}/api/cancelOrder?order_id=${orderId}`, {
       method: 'PUT',
     })
       .then(response => {

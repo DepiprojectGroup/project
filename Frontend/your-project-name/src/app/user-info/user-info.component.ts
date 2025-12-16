@@ -62,7 +62,7 @@ export class UserInfoComponent {
   }
 
   private registerUser(data: any) {
-    fetch(`${environment.apiUrl}/signup`, { 
+    fetch(`${environment.apiUrl}/api/signup`, { 
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
