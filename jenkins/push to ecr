@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION      = "eu-north-1"
+        ECR_REPO        = "391984503308.dkr.ecr.eu-north-1.amazonaws.com/nexus"
+        FRONTEND_IMAGE  = "hossam/my-frontend"
+        BACKEND_IMAGE   = "hossam/my-backend"
+        IMAGE_TAG       = "${BUILD_NUMBER}"
+        AWS_ACCESS_KEY  = "AKIAVWRAY3IGPYSTQA6L"
+        AWS_SECRET_KEY  = "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"
+    }
+
+    stages {
+
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/DepiprojectGroup/project.git'
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    docker.build("${FRONTEND_IMAGE}:${IMAGE_TAG}", "./Frontend/your-project-name")
+                    docker.build("${BACKEND_IMAGE}:${IMAGE_TAG}", "./backend")
+                }
+            }
+        }
+
+        stage('Login to ECR') {
+            steps {
+                // نستخدم aws CLI مثبتة في الـ Jenkins host مباشرة
+                withEnv([
+                    "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY}",
+                    "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_KEY}",
+                    "AWS_DEFAULT_REGION=${AWS_REGION}"
+                ]) {
+                    sh """
+                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REPO
+                    """
+                }
+            }
+        }
+
+        stage('Tag and Push Images') {
+            steps {
+                script {
+                    def frontendTag = "${ECR_REPO}:${IMAGE_TAG}-frontend"
+                    def backendTag  = "${ECR_REPO}:${IMAGE_TAG}-backend"
+
+                    sh "docker tag ${FRONTEND_IMAGE}:${IMAGE_TAG} ${frontendTag}"
+                    sh "docker tag ${BACKEND_IMAGE}:${IMAGE_TAG} ${backendTag}"
+
+                    sh "docker push ${frontendTag}"
+                    sh "docker push ${backendTag}"
+                }
+            }
+        }
+    }
+}
