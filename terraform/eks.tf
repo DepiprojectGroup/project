@@ -86,7 +86,6 @@ resource "aws_eks_node_group" "main" {
 
   instance_types = [var.eks_node_instance_type]
 
-  # Free Tier optimization
   capacity_type = "ON_DEMAND"
 
   depends_on = [

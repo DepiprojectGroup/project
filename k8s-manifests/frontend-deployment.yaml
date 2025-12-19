@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: 654654186246.dkr.ecr.eu-central-1.amazonaws.com/ordering-system/frontend:latest
+        image: 391984503308.dkr.ecr.eu-north-1.amazonaws.com/ordering-system/frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 80
