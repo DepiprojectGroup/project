@@ -10,7 +10,7 @@ pipeline {
         
         stage(' Docker images') {
             steps {
-                bat '''
+                sh '''
                     docker build -t backend-image ./backend
                     docker build -t frontend-image ./Frontend/your-project-name
                 '''
@@ -18,11 +18,11 @@ pipeline {
         }
             stage('Run') {
             steps {
-                bat '''
+                sh '''
                     docker run -d -p 8089:8090 --name  backend-image  backend-image
                     docker run -d -p 4000:80 --name frontend-image frontend-image
                     
-                    echo.
+                    echo""
                     echo ====================
                     echo    is running !!!
                     echo ====================
