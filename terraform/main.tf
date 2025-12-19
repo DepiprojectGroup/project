@@ -83,24 +83,47 @@ resource "aws_subnet" "private_2" {
   }
 }
 
-# Elastic IP for NAT Gateway
+# Elastic IP for NAT Gateway 1 (AZ-A)
 resource "aws_eip" "nat" {
   domain = "vpc"
 
   tags = {
-    Name = "${var.project_name}-nat-eip"
+    Name = "${var.project_name}-nat-eip-az-a"
   }
 
   depends_on = [aws_internet_gateway.main]
 }
 
-# NAT Gateway
+# Elastic IP for NAT Gateway 2 (AZ-B)
+resource "aws_eip" "nat_2" {
+  domain = "vpc"
+
+  tags = {
+    Name = "${var.project_name}-nat-eip-az-b"
+  }
+
+  depends_on = [aws_internet_gateway.main]
+}
+
+# NAT Gateway 1 in Public Subnet 1 (AZ-A)
 resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public.id
 
   tags = {
-    Name = "${var.project_name}-nat-gateway"
+    Name = "${var.project_name}-nat-gateway-az-a"
+  }
+
+  depends_on = [aws_internet_gateway.main]
+}
+
+# NAT Gateway 2 in Public Subnet 2 (AZ-B)
+resource "aws_nat_gateway" "main_2" {
+  allocation_id = aws_eip.nat_2.id
+  subnet_id     = aws_subnet.public_2.id
+
+  tags = {
+    Name = "${var.project_name}-nat-gateway-az-b"
   }
 
   depends_on = [aws_internet_gateway.main]
@@ -120,7 +143,7 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Private Route Table
+# Private Route Table 1 (AZ-A) - Routes through NAT Gateway 1
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.main.id
 
@@ -130,7 +153,21 @@ resource "aws_route_table" "private" {
   }
 
   tags = {
-    Name = "${var.project_name}-private-rt"
+    Name = "${var.project_name}-private-rt-az-a"
+  }
+}
+
+# Private Route Table 2 (AZ-B) - Routes through NAT Gateway 2
+resource "aws_route_table" "private_2" {
+  vpc_id = aws_vpc.main.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.main_2.id
+  }
+
+  tags = {
+    Name = "${var.project_name}-private-rt-az-b"
   }
 }
 
@@ -152,5 +189,5 @@ resource "aws_route_table_association" "private" {
 
 resource "aws_route_table_association" "private_2" {
   subnet_id      = aws_subnet.private_2.id
-  route_table_id = aws_route_table.private.id
+  route_table_id = aws_route_table.private_2.id
 }
