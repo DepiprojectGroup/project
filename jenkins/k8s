@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     dir(env.MANIFESTS_DIR) {
-                        // استخدم --insecure-skip-tls-verify لحل مشكلة الشهادة
+                       
                         sh '/kubectl apply -f . --insecure-skip-tls-verify'
                     }
                 }
