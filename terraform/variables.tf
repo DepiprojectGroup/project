@@ -92,7 +92,7 @@ variable "db_username" {
 variable "db_password" {
   description = "Database master password"
   type        = string
-  default     = "changeme123"  # Change this in production!
+  default     = "Joe123#4Secure!"
   sensitive   = true
 }
 
